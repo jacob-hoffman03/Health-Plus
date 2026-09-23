@@ -53,6 +53,9 @@
 .hp-big{font-size:38px;font-weight:700;letter-spacing:-1px;line-height:1.05;}
 .hp-big small{font-size:16px;font-weight:500;color:#8e8e93;letter-spacing:0;}
 .hp-pinrow{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;}
+.hp-ring{position:relative;width:84px;height:84px;flex:none;}
+.hp-ring svg{display:block;}
+.hp-ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#111;letter-spacing:-.3px;}
 .hp-ico svg{display:block;}
 
 /* ---------- category tiles ---------- */
@@ -4104,6 +4107,13 @@ function hpRender(){
 })();
 
 /* ---------- shared bits ---------- */
+function hpRing(frac,color){
+  const C=2*Math.PI*36, p=Math.max(0,Math.min(1,frac||0));
+  return '<div class="hp-ring"><svg width="84" height="84" viewBox="0 0 84 84">'
+    +'<circle cx="42" cy="42" r="36" fill="none" stroke="#eceef3" stroke-width="10"/>'
+    +'<circle cx="42" cy="42" r="36" fill="none" stroke="'+color+'" stroke-width="10" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+(C*(1-p)).toFixed(1)+'" transform="rotate(-90 42 42)"/></svg>'
+    +'<b>'+Math.round((frac||0)*100)+'%</b></div>';
+}
 function hpAvatar(size){
   const p=S.profile||{}, img=p.img;
   const initials=(p.name||"J").trim().split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase();
@@ -4114,30 +4124,31 @@ function hpPinnedDefs(){
   const ws=sortedWeights(), wcur=ws.length?ws[ws.length-1].w:0, wdate=ws.length?ws[ws.length-1].d:"";
   const wc=waterCalc(), d=day(), woz=Math.round(d.waterOz||0);
   const tl=tiredLevel(todayStr());
-  const cals7=[],p7=[];
-  for(let i=6;i>=0;i--){ const k=addDays(todayStr(),-i), tt=totals(k); cals7.push(Math.round(tt.cal)); p7.push(Math.round(tt.p)); }
   const w7=ws.slice(-7).map(x=>x.w);
+  const gw=g.weight||0, gws=g.weightStart||0;
+  let wpct=null;
+  if(wcur&&gw&&gws&&gw!==gws) wpct=Math.max(0,Math.min(1,(wcur-gws)/(gw-gws)));
   return {
     energy:{icon:"apple",color:"#34c759",label:"Dietary Energy",date:hpDateLbl(todayStr()),go:"nutrition",
       big:fmtN(t.cal)+' <small>cal</small>',
       sub:'<span class="hp-sub">of '+fmtN(goal)+' goal</span>',
-      art:hpBars(cals7,"#34c759")},
+      art:hpRing(goal?t.cal/goal:0,"#34c759")},
     protein:{icon:"bolt",color:"#ff9500",label:"Protein",date:hpDateLbl(todayStr()),go:"nutrition",
       big:fmtN(t.p)+' <small>g</small>',
       sub:'<span class="hp-sub">of '+fmtN(g.protein||0)+' g goal</span>',
-      art:hpBars(p7,"#ff9500")},
+      art:hpRing(g.protein?t.p/g.protein:0,"#ff9500")},
     weight:{icon:"person",color:"#af52de",label:"Weight",date:wdate?hpDateLbl(wdate):"—",go:"weight",
       big:(wcur?r1(wcur):"—")+' <small>lb</small>',
       sub:w7.length>1?'<span class="hp-sub">'+(w7[w7.length-1]>=w7[0]?"+":"")+r1(w7[w7.length-1]-w7[0])+' lb this week</span>':"",
-      art:w7.length>1?hpSpark(w7,"#af52de"):""},
+      art:wpct==null?(w7.length>1?hpSpark(w7,"#af52de"):""):hpRing(wpct,"#af52de")},
     water:{icon:"drop",color:"#0a84ff",label:"Water",date:hpDateLbl(todayStr()),go:"more",
       big:woz+' <small>oz</small>',
       sub:'<span class="hp-sub">of '+(wc.target||0)+' oz target</span>',
-      art:'<div class="hp-bar" style="width:110px"><i style="width:'+Math.min(100,wc.target?woz/wc.target*100:0)+'%;background:#0a84ff"></i></div>'},
+      art:hpRing(wc.target?woz/wc.target:0,"#0a84ff")},
     fatigue:{icon:"brain",color:"#5ac8fa",label:"Energy",date:hpDateLbl(todayStr()),go:"energy",
       big:tl.score+'<small>%</small>',
       sub:'<span class="hp-sub">feeling '+esc(tl.label.toLowerCase())+'</span>',
-      art:""}
+      art:hpRing(tl.score/100,"#5ac8fa")}
   };
 }
 function hpDefaultPinned(){ return ["energy","protein","weight","water","fatigue"]; }
@@ -5096,7 +5107,7 @@ function hpProfileSheet(){
 }
 
 /* ================= init ================= */
-const HP_VERSION="2026.09.23-e";
+const HP_VERSION="2026.09.23-f";
 /* Same seed-restore behavior as Fuel: on a true fresh boot, restore Jay's
    exported backup (seed-data.json) before the first render. */
 (function hpBoot(){
