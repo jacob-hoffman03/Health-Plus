@@ -11,6 +11,7 @@
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='white'/%3E%3Cpath d='M32 15v34M15 32h34' stroke='%2334c759' stroke-width='10' stroke-linecap='round'/%3E%3C/svg%3E">
 <style>
 /* ============ Health+ : Apple Health style shell ============ */
+:root{--hp-acc:var(--hp-acc);--hp-acc-deep:#0063d1;--hp-acc-soft:#e3efff;}
 #hp{position:fixed;inset:0;background:#f2f2f7;color:#000;z-index:1;
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
   -webkit-font-smoothing:antialiased;}
@@ -27,7 +28,7 @@
 .hp-topbar{position:sticky;top:0;z-index:5;background:rgba(242,242,247,.86);
   backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
   padding:14px 20px 8px;display:flex;align-items:center;gap:10px;}
-.hp-back{color:#007aff;font-size:17px;background:none;border:0;padding:6px 10px 6px 0;font-weight:400;}
+.hp-back{color:var(--hp-acc);font-size:17px;background:none;border:0;padding:6px 10px 6px 0;font-weight:400;}
 .hp-back b{font-size:22px;font-weight:600;margin-right:2px;position:relative;top:1px;}
 .hp-navtitle{font-size:17px;font-weight:600;}
 
@@ -86,8 +87,8 @@
 #hpTabbar button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;
   padding:10px 26px;border-radius:32px;font-size:12.5px;font-weight:500;color:#000;min-width:96px;}
 #hpTabbar button svg{width:27px;height:27px;fill:#000;}
-#hpTabbar button.on{background:#e8e8ed;color:#007aff;}
-#hpTabbar button.on svg{fill:#007aff;}
+#hpTabbar button.on{background:#e8e8ed;color:var(--hp-acc);}
+#hpTabbar button.on svg{fill:var(--hp-acc);}
 
 /* ---------- search ---------- */
 .hp-search{margin:6px 16px 4px;background:#e8e8ed;border-radius:16px;display:flex;align-items:center;
@@ -105,7 +106,7 @@
 .hp-row .hp-rlab{flex:1;}
 .hp-row .hp-rsub{display:block;font-size:13.5px;color:#8e8e93;margin-top:2px;}
 .hp-row .hp-rval{color:#8e8e93;font-size:16px;}
-.hp-bluelink{color:#007aff;font-size:17px;}
+.hp-bluelink{color:var(--hp-acc);font-size:17px;}
 
 /* ---------- sheets ---------- */
 #hpSheetWrap{position:absolute;inset:0;z-index:40;background:rgba(0,0,0,.32);
@@ -122,9 +123,9 @@
 .hp-sheet-body{overflow-y:auto;padding:0 16px 30px;-webkit-overflow-scrolling:touch;}
 
 /* ---------- buttons / inputs ---------- */
-.hp-btn{display:block;width:100%;border:0;border-radius:20px;background:#007aff;color:#fff;
+.hp-btn{display:block;width:100%;border:0;border-radius:20px;background:var(--hp-acc);color:#fff;
   font-size:17px;font-weight:600;padding:15px;margin:10px 0;}
-.hp-btn.gray{background:#e8e8ed;color:#007aff;}
+.hp-btn.gray{background:#e8e8ed;color:var(--hp-acc);}
 .hp-btn.plain{background:#e8e8ed;color:#000;}
 .hp-field{margin:10px 0;}
 .hp-field label{display:block;font-size:13px;color:#8e8e93;margin:0 4px 6px;text-transform:uppercase;
@@ -133,7 +134,7 @@
   font-size:17px;color:#000;outline:none;box-sizing:border-box;}
 .hp-stepper{display:flex;align-items:center;justify-content:center;gap:22px;margin:16px 0;}
 .hp-stepper button{width:52px;height:52px;border-radius:50%;border:0;background:#e8e8ed;
-  font-size:30px;color:#007aff;line-height:1;}
+  font-size:30px;color:var(--hp-acc);line-height:1;}
 .hp-stepper b{font-size:30px;font-weight:700;min-width:80px;text-align:center;}
 .hp-seg{display:flex;background:#e8e8ed;border-radius:12px;padding:3px;margin:12px 0;}
 .hp-seg button{flex:1;border:0;background:none;padding:8px;border-radius:9px;font-size:14px;
@@ -149,7 +150,7 @@
 .hp-food .hp-fnm{flex:1;min-width:0;}
 .hp-food .hp-fnm b{display:block;font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .hp-food .hp-fnm span{font-size:13.5px;color:#8e8e93;}
-.hp-food .hp-fadd{width:34px;height:34px;border-radius:50%;border:0;background:#e8e8ed;color:#007aff;
+.hp-food .hp-fadd{width:34px;height:34px;border-radius:50%;border:0;background:#e8e8ed;color:var(--hp-acc);
   font-size:22px;line-height:1;flex:none;font-weight:400;}
 
 /* ---------- misc components ---------- */
@@ -161,7 +162,7 @@
 .hp-check.done svg{width:15px;height:15px;fill:#fff;}
 .hp-datenav{display:flex;align-items:center;justify-content:space-between;margin:6px 16px 12px;}
 .hp-datenav button{border:0;background:#fff;width:40px;height:40px;border-radius:50%;font-size:20px;
-  color:#007aff;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+  color:var(--hp-acc);box-shadow:0 1px 4px rgba(0,0,0,.06);}
 .hp-datenav b{font-size:17px;font-weight:600;}
 .hp-macros{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:0 16px 14px;}
 .hp-macro{background:#fff;border-radius:20px;padding:14px;text-align:center;}
@@ -175,12 +176,12 @@
 .hp-kv:first-child{border-top:0;}
 .hp-kv .k{color:#000;}
 .hp-kv .v{color:#8e8e93;font-weight:500;text-align:right;}
-.hp-editlink{color:#007aff;font-size:15px;font-weight:500;background:none;border:0;}
+.hp-editlink{color:var(--hp-acc);font-size:15px;font-weight:500;background:none;border:0;}
 .hp-note{font-size:13.5px;color:#8e8e93;margin:8px 20px;line-height:1.45;}
 .hp-empty{text-align:center;color:#8e8e93;padding:26px 20px;font-size:15px;}
 .hp-photos{display:flex;gap:10px;overflow-x:auto;padding:4px 16px 8px;}
 .hp-photos img{width:96px;height:96px;border-radius:16px;object-fit:cover;flex:none;}
-.hp-phadd{width:96px;height:96px;border-radius:16px;background:#e8e8ed;border:0;color:#007aff;
+.hp-phadd{width:96px;height:96px;border-radius:16px;background:#e8e8ed;border:0;color:var(--hp-acc);
   font-size:30px;flex:none;}
 .hp-hist{display:flex;align-items:center;justify-content:space-between;padding:12px 0;
   border-top:1px solid #f0f0f4;font-size:16px;}
@@ -214,6 +215,13 @@
 .hp-profile-top .hp-avatar{width:88px;height:88px;font-size:34px;margin:0 auto 12px;}
 .hp-profile-top h2{font-size:24px;margin:0;font-weight:700;}
 .hp-profile-top p{color:#8e8e93;font-size:14px;margin:6px 0 0;}
+
+/* ---------- theme picker ---------- */
+.hp-themerow{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+.hp-themepick{width:44px;height:44px;border-radius:50%;border:0;padding:0;cursor:pointer;position:relative;flex:none;}
+.hp-themepick.sel{box-shadow:0 0 0 3px #fff,0 0 0 5px var(--hp-acc);}
+.hp-themepick.custom{overflow:hidden;background:conic-gradient(#ff5a5a,#ff9f43,#ffd60a,#34c759,#0a84ff,#af52de,#ff5a5a);}
+.hp-themepick.custom input{position:absolute;inset:0;opacity:0;cursor:pointer;}
 
 </style>
 </head>
@@ -4089,6 +4097,7 @@ function hpSetTab(t){ hpTab=t; hpStack=[]; hpRender(); }
 function hpPush(screen,params,title){ hpStack.push({screen:screen,params:params||{},title:title||""}); hpRender(); }
 function hpBack(){ hpStack.pop(); hpRender(); }
 function hpRender(){
+  try{ hpApplyTheme(hpThemeColor()); }catch(e){}
   const cur=hpStack[hpStack.length-1];
   const scr=cur?cur.screen:hpTab, prm=cur?cur.params:{};
   const backHtml=cur?'<div class="hp-topbar"><button class="hp-back" id="hpBackBtn"><b>‹</b>'+esc((cur.params&&cur.params.back)||"Back")+'</button><span class="hp-navtitle">'+esc(cur.title||"")+'</span></div>':"";
@@ -4111,6 +4120,26 @@ function hpRender(){
   });
 })();
 
+/* ---------- app theme (profile) ---------- */
+const HP_THEME_PRESETS=["#007aff","#5b5bf0","#af52de","#ff2d55","#ff9500","#34c759"];
+function hpShade(hex,f){
+  const n=parseInt(hex.slice(1),16); let r=(n>>16)&255,g=(n>>8)&255,b=n&255;
+  const t=f<0?0:255,p=Math.min(1,Math.abs(f));
+  r=Math.round((t-r)*p+r); g=Math.round((t-g)*p+g); b=Math.round((t-b)*p+b);
+  return "#"+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
+}
+function hpThemeColor(){
+  const t=S.profile&&S.profile.theme;
+  return /^#[0-9a-fA-F]{6}$/.test(t)?t:"#007aff";
+}
+function hpApplyTheme(hex){
+  hex=/^#[0-9a-fA-F]{6}$/.test(hex)?hex:"#007aff";
+  const rs=document.documentElement.style;
+  rs.setProperty("--hp-acc",hex);
+  rs.setProperty("--hp-acc-deep",hpShade(hex,-0.18));
+  rs.setProperty("--hp-acc-soft",hpShade(hex,0.85));
+  const m=document.querySelector('meta[name="theme-color"]'); if(m) m.setAttribute("content",hex);
+}
 /* ---------- shared bits ---------- */
 function hpRing(frac,color){
   const C=2*Math.PI*36, p=Math.max(0,Math.min(1,frac||0));
@@ -5106,6 +5135,7 @@ function hpProfileSheet(){
   const initials=nm.trim().split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase();
   hpSheet("",
     '<div class="hp-profile-top"><span class="hp-avatar" style="cursor:default">'+(img?'<img src="'+img+'" alt="">':esc(initials))+'</span><h2>'+esc(nm)+'</h2></div>'
+    +'<div class="hp-pad"><h2 class="hp-sec" style="font-size:19px">App Theme</h2></div><div class="hp-group"><div style="padding:14px 16px"><div class="hp-themerow" id="hpThemeRow"></div></div></div>'
     +'<div class="hp-group" style="margin-top:16px">'
     +'<button class="hp-row" id="pfH1"><span class="hp-rlab">Health Details</span><span class="hp-chev">›</span></button>'
     +'<button class="hp-row" id="pfH2"><span class="hp-rlab">Medical ID</span><span class="hp-chev">›</span></button></div>'
@@ -5126,10 +5156,27 @@ function hpProfileSheet(){
   $hp("pfP1").onclick=()=>{ hpExport(); };
   $hp("pfP2").onclick=()=>hpSheet("Apps","<p class='hp-note' style='margin:6px 4px;font-size:16px;color:#000'>No connected apps. Health+ keeps your data on this device.</p>");
   $hp("pfP3").onclick=()=>hpSheet("Devices","<p class='hp-note' style='margin:6px 4px;font-size:16px;color:#000'>This device only.</p>");
+  hpRenderThemePicker();
+}
+function hpRenderThemePicker(){
+  const row=$hp("hpThemeRow"); if(!row) return;
+  const cur=hpThemeColor().toLowerCase();
+  const isPreset=HP_THEME_PRESETS.some(c=>c===cur);
+  row.innerHTML=HP_THEME_PRESETS.map(c=>
+    '<button class="hp-themepick'+(c===cur?" sel":"")+'" data-c="'+c+'" style="background:'+c+'" aria-label="Theme '+c+'"></button>'
+  ).join("")+'<label class="hp-themepick custom'+(isPreset?"":" sel")+'" aria-label="Custom theme color"><input type="color" id="hpThemeCustom" value="'+cur+'"></label>';
+  row.querySelectorAll(".hp-themepick[data-c]").forEach(b=>{ b.onclick=()=>hpSetTheme(b.getAttribute("data-c")); });
+  const ci=$hp("hpThemeCustom");
+  ci.addEventListener("input",()=>hpApplyTheme(ci.value));
+  ci.addEventListener("change",()=>hpSetTheme(ci.value));
+}
+function hpSetTheme(hex){
+  if(!S.profile) S.profile={};
+  S.profile.theme=hex; hpApplyTheme(hex); save(); hpRenderThemePicker();
 }
 
 /* ================= init ================= */
-const HP_VERSION="2026.09.23-g";
+const HP_VERSION="2026.09.23-h";
 /* Same seed-restore behavior as Fuel: on a true fresh boot, restore Jay's
    exported backup (seed-data.json) before the first render. */
 (function hpBoot(){
