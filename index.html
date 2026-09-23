@@ -14,7 +14,8 @@
 #hp{position:fixed;inset:0;background:#f2f2f7;color:#000;z-index:1;
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
   -webkit-font-smoothing:antialiased;}
-#hpView{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;
+#hpView{position:absolute;top:0;bottom:0;left:0;right:0;margin:0 auto;width:100%;max-width:520px;
+  overflow-y:auto;overflow-x:hidden;
   -webkit-overflow-scrolling:touch;padding-bottom:130px;}
 #hp.noTab #hpTabbar{display:none;}
 
@@ -4660,7 +4661,7 @@ function hpDayCycle(){
   });
   el.innerHTML='<div style="position:relative;height:44px;background:#f2f2f7;border-radius:9px;overflow:visible;margin:4px 0 2px">'
     +'<div style="position:absolute;top:5px;bottom:5px;left:0;right:0">'+segs+'</div>'
-    +'<div style="position:absolute;top:2px;bottom:2px;left:'+(nowMin/1440*100)+'%;width:2px;background:#000;border-radius:1px"></div>'
+    +'<div style="position:absolute;top:2px;bottom:2px;left:'+(nowMin/1440*100)+'%;width:3px;background:#fff;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.10),0 1px 3px rgba(0,0,0,.25)"></div>'
     +labels+'</div>'
     +'<div class="hp-sub" style="margin-top:22px">Learned from your actual meal times.</div>';
   return el;
@@ -5095,7 +5096,7 @@ function hpProfileSheet(){
 }
 
 /* ================= init ================= */
-const HP_VERSION="2026.09.23-c";
+const HP_VERSION="2026.09.23-d";
 /* Same seed-restore behavior as Fuel: on a true fresh boot, restore Jay's
    exported backup (seed-data.json) before the first render. */
 (function hpBoot(){
