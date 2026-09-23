@@ -144,9 +144,9 @@
 /* ---------- food rows ---------- */
 .hp-food{display:flex;align-items:center;gap:12px;background:#fff;border-radius:18px;
   padding:12px 14px;margin-bottom:10px;width:100%;border:0;text-align:left;}
-.hp-food .hp-fimg{width:46px;height:46px;border-radius:12px;background:#f2f2f7;flex:none;
+.hp-fimg{width:46px;height:46px;border-radius:12px;background:#f2f2f7;flex:none;
   display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:20px;color:#8e8e93;}
-.hp-food .hp-fimg img{width:100%;height:100%;object-fit:cover;}
+.hp-fimg img{width:100%;height:100%;object-fit:cover;}
 .hp-food .hp-fnm{flex:1;min-width:0;}
 .hp-food .hp-fnm b{display:block;font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .hp-food .hp-fnm span{font-size:13.5px;color:#8e8e93;}
@@ -4340,7 +4340,8 @@ function scrNutrition(){
     h+='<div class="hp-mealhead"><b>'+HP_MEAL_LBL[m]+'</b><span>'+fmtN(mc[m])+' cal</span></div><div class="hp-group">';
     if(!items.length) h+='<div class="hp-empty" style="padding:14px">Nothing logged yet</div>';
     items.forEach(e=>{
-      h+='<button class="hp-row" data-del="'+m+'|'+e.id+'"><span class="hp-rlab">'+esc(e.n)+'<span class="hp-rsub">'+esc((e.qty>1?e.qty+" × ":"")+e.s)+'</span></span><span class="hp-rval">'+fmtN(e.cal)+' cal</span></button>';
+      const th=e.img?'<img src="'+e.img+'" alt="">':'<span>'+esc((e.n||"?")[0].toUpperCase())+'</span>';
+      h+='<button class="hp-row" data-del="'+m+'|'+e.id+'"><span class="hp-fimg" style="width:40px;height:40px;border-radius:10px;font-size:16px">'+th+'</span><span class="hp-rlab">'+esc(e.n)+'<span class="hp-rsub">'+esc((e.qty>1?e.qty+" × ":"")+e.s)+'</span></span><span class="hp-rval">'+fmtN(e.cal)+' cal</span></button>';
     });
     h+='<button class="hp-row" data-add="'+m+'"><span class="hp-bluelink">+ Add Food</span></button></div>';
   });
@@ -4370,9 +4371,17 @@ function scrNutrition(){
     document.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>hpFoodSearch(b.dataset.add));
     document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
       const [m,id]=b.dataset.del.split("|");
-      hpSheet("Remove item","<p class='hp-note' style='margin:6px 4px;font-size:16px;color:#000'>Remove this entry from "+HP_MEAL_LBL[m]+"?</p><button class='hp-btn' id='hpDelYes' style='background:#ff3b30'>Remove</button><button class='hp-btn plain' id='hpDelNo'>Keep</button>");
-      $hp("hpDelNo").onclick=hpCloseSheet;
-      $hp("hpDelYes").onclick=()=>{ const d=day(); d.meals[m]=d.meals[m].filter(e=>e.id!==id); hpCloseSheet(); hpSave(); };
+      const dd=day(), e=(dd.meals[m]||[]).find(x=>x.id===id); if(!e) return;
+      const im=e.img?'<img src="'+e.img+'" style="width:120px;height:120px;border-radius:20px;object-fit:cover" alt="">':'<div class="hp-fimg" style="width:120px;height:120px;border-radius:20px;font-size:40px"><span>'+esc((e.n||"?")[0].toUpperCase())+'</span></div>';
+      hpSheet(esc(e.n),
+        '<div class="hp-center" style="margin:6px 0 10px">'+im+'</div>'
+        +'<p class="hp-sub hp-center" style="margin-bottom:10px">'+esc((e.qty>1?e.qty+" × ":"")+e.s)+' · '+fmtN(e.cal)+' cal</p>'
+        +'<input type="file" id="hpEntryPhoto" accept="image/*" style="display:none">'
+        +'<button class="hp-row" id="hpEntryPhotoBtn" style="border-radius:18px;margin-bottom:10px"><span class="hp-bluelink">'+(e.img?"Change Photo":"Add Photo")+'</span><span class="hp-chev">›</span></button>'
+        +'<button class="hp-btn" id="hpDelYes" style="background:#ff3b30">Remove Entry</button>');
+      $hp("hpEntryPhotoBtn").onclick=()=>{ $hp("hpEntryPhoto").click(); };
+      $hp("hpEntryPhoto").addEventListener("change",ev=>{ hpPhotoPick(ev.target,data=>{ e.img=data; hpSave(); hpCloseSheet(); hpRender(); }); ev.target.value=""; });
+      $hp("hpDelYes").onclick=()=>{ dd.meals[m]=dd.meals[m].filter(x=>x.id!==id); hpCloseSheet(); hpSave(); };
     });
   };
   return h;
@@ -5176,7 +5185,7 @@ function hpSetTheme(hex){
 }
 
 /* ================= init ================= */
-const HP_VERSION="2026.09.23-i";
+const HP_VERSION="2026.09.23-j";
 /* Same seed-restore behavior as Fuel: on a true fresh boot, restore Jay's
    exported backup (seed-data.json) before the first render. */
 (function hpBoot(){
