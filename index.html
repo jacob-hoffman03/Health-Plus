@@ -56,6 +56,11 @@
 .hp-ring{position:relative;width:84px;height:84px;flex:none;}
 .hp-ring svg{display:block;}
 .hp-ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#111;letter-spacing:-.3px;}
+.hp-card-xl{padding:22px 20px;}
+.hp-big-xl{font-size:46px !important;}
+.hp-big-xl small{font-size:18px !important;}
+.hp-ring-xl{width:128px;height:128px;}
+.hp-ring-xl b{font-size:22px;}
 .hp-ico svg{display:block;}
 
 /* ---------- category tiles ---------- */
@@ -4114,6 +4119,22 @@ function hpRing(frac,color){
     +'<circle cx="42" cy="42" r="36" fill="none" stroke="'+color+'" stroke-width="10" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+(C*(1-p)).toFixed(1)+'" transform="rotate(-90 42 42)"/></svg>'
     +'<b>'+Math.round((frac||0)*100)+'%</b></div>';
 }
+/* Fuel-style dual ring for Dietary Energy: outer fills to maintenance, inner fills the surplus zone */
+function hpEnergyRing(eCal,mCal,sGoal,tCal,color){
+  const C1=2*Math.PI*56, C2=2*Math.PI*46;
+  const split=mCal>0&&sGoal>0;
+  const mFrac=split?Math.min(eCal/mCal,1):(tCal>0?Math.min(eCal/tCal,1):0);
+  const sFrac=split?Math.min(Math.max(eCal-mCal,0)/sGoal,1):0;
+  const sCol=(split&&eCal>=tCal)?"#2fbf71":"#c9ccd6";
+  let s='<div class="hp-ring hp-ring-xl"><svg width="128" height="128" viewBox="0 0 128 128">'
+    +'<circle cx="64" cy="64" r="56" fill="none" stroke="#eceef3" stroke-width="11"/>'
+    +'<circle cx="64" cy="64" r="56" fill="none" stroke="'+color+'" stroke-width="11" stroke-linecap="round" stroke-dasharray="'+C1.toFixed(2)+'" stroke-dashoffset="'+(C1*(1-mFrac)).toFixed(1)+'" transform="rotate(-90 64 64)"/>';
+  if(split){
+    s+='<circle cx="64" cy="64" r="46" fill="none" stroke="#eceef3" stroke-width="6"/>'
+      +'<circle cx="64" cy="64" r="46" fill="none" stroke="'+sCol+'" stroke-width="6" stroke-linecap="round" stroke-dasharray="'+C2.toFixed(2)+'" stroke-dashoffset="'+(C2*(1-sFrac)).toFixed(1)+'" transform="rotate(-90 64 64)"/>';
+  }
+  return s+'</svg><b>'+Math.round(tCal>0?eCal/tCal*100:0)+'%</b></div>';
+}
 function hpAvatar(size){
   const p=S.profile||{}, img=p.img;
   const initials=(p.name||"J").trim().split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase();
@@ -4128,11 +4149,12 @@ function hpPinnedDefs(){
   const gw=g.weight||0, gws=g.weightStart||0;
   let wpct=null;
   if(wcur&&gw&&gws&&gw!==gws) wpct=Math.max(0,Math.min(1,(wcur-gws)/(gw-gws)));
+  const maint=g.maintenance||0, surp=g.surplus||0;
   return {
-    energy:{icon:"apple",color:"#34c759",label:"Dietary Energy",date:hpDateLbl(todayStr()),go:"nutrition",
+    energy:{icon:"apple",color:"#34c759",label:"Dietary Energy",date:hpDateLbl(todayStr()),go:"nutrition",xl:true,
       big:fmtN(t.cal)+' <small>cal</small>',
       sub:'<span class="hp-sub">of '+fmtN(goal)+' goal</span>',
-      art:hpRing(goal?t.cal/goal:0,"#34c759")},
+      art:hpEnergyRing(t.cal,maint,surp,goal,"#34c759")},
     protein:{icon:"bolt",color:"#ff9500",label:"Protein",date:hpDateLbl(todayStr()),go:"nutrition",
       big:fmtN(t.p)+' <small>g</small>',
       sub:'<span class="hp-sub">of '+fmtN(g.protein||0)+' g goal</span>',
@@ -4161,9 +4183,9 @@ function scrSummary(){
   h+='<div class="hp-pad"><div style="display:flex;justify-content:space-between;align-items:center"><h2 class="hp-sec" style="margin:14px 0 10px">Pinned</h2><button class="hp-editlink" id="hpPinEdit">Edit</button></div></div>';
   S.hpPinned.forEach(k=>{
     const c=defs[k]; if(!c) return;
-    h+='<div class="hp-card" data-go="'+c.go+'" style="cursor:pointer">'
+    h+='<div class="hp-card'+(c.xl?" hp-card-xl":"")+'" data-go="'+c.go+'" style="cursor:pointer">'
       +'<div class="hp-pinhead"><span class="hp-ico">'+hpIco(c.icon,c.color)+'</span><span class="hp-pinlabel" style="color:'+c.color+'">'+c.label+'</span><span class="hp-pindate">'+c.date+'</span><span class="hp-chev">›</span></div>'
-      +'<div class="hp-pinrow"><div><div class="hp-big">'+c.big+'</div><div style="margin-top:4px">'+c.sub+'</div></div><div>'+c.art+'</div></div></div>';
+      +'<div class="hp-pinrow"><div><div class="hp-big'+(c.xl?" hp-big-xl":"")+'">'+c.big+'</div><div style="margin-top:4px">'+c.sub+'</div></div><div>'+c.art+'</div></div></div>';
   });
   h+='<div class="hp-pad"><h2 class="hp-sec">Trends</h2></div>'
     +'<div class="hp-group"><button class="hp-row" data-go="trends"><span class="hp-ico">'+hpIcoLine("clock","#0a84ff")+'</span><span class="hp-rlab">Show All Health Trends</span><span class="hp-chev">›</span></button></div>';
@@ -5107,7 +5129,7 @@ function hpProfileSheet(){
 }
 
 /* ================= init ================= */
-const HP_VERSION="2026.09.23-f";
+const HP_VERSION="2026.09.23-g";
 /* Same seed-restore behavior as Fuel: on a true fresh boot, restore Jay's
    exported backup (seed-data.json) before the first render. */
 (function hpBoot(){
