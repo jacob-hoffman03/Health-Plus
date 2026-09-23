@@ -33,7 +33,7 @@
 .hp-navtitle{font-size:17px;font-weight:600;}
 
 /* summary hero header */
-.hp-hero{background:linear-gradient(160deg,#ffe3ec 0%,#e9f6df 38%,#dceaff 72%,#efe4ff 100%);
+.hp-hero{background:linear-gradient(165deg,var(--hp-acc-soft) 0%,#f2f2f7 100%);
   padding:64px 20px 18px;margin-bottom:4px;}
 .hp-hero-row{display:flex;align-items:center;justify-content:space-between;}
 .hp-avatar{width:44px;height:44px;border-radius:50%;background:#d1d1d6;color:#fff;
@@ -5176,7 +5176,7 @@ function hpSetTheme(hex){
 }
 
 /* ================= init ================= */
-const HP_VERSION="2026.09.23-h";
+const HP_VERSION="2026.09.23-i";
 /* Same seed-restore behavior as Fuel: on a true fresh boot, restore Jay's
    exported backup (seed-data.json) before the first render. */
 (function hpBoot(){
